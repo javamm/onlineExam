@@ -1,0 +1,118 @@
+#{extends 'main.html' /}
+#{set title:'JavaMM' /}
+<script language="javascript">
+	
+	function cal(){
+		
+		jQuery("#btnCommit").css("display","none");
+		
+		var str="";
+		jQuery("input[name='options']:checked").each(
+			function(){
+				str+=$(this).val()+",";
+			}
+		)
+		if(jQuery("#answer").html()==str){
+			updateCookie(true);
+		}else{
+			updateCookie(false);
+		}
+		
+		//显示答案与解析
+		jQuery("#result").css("display","block");
+   }
+	
+	function updateCookie(isCorrect){
+		
+		if(isCorrect){
+			jQuery("#greenImg").css("display","block");
+			jQuery("#redImg").css("display","none");
+		}
+			else{
+				jQuery("#redImg").css("display","block");
+				jQuery("#greenImg").css("display","none");
+		}
+		
+		 var total;
+		   var correct;
+		   if(jQuery.cookie("total")==null){
+			   jQuery.cookie("total",0,{expires:1});
+			}else{
+				total=parseInt(jQuery.cookie("total")) + 1;
+			}
+		   
+		   if(jQuery.cookie("correct")==null){
+			   jQuery.cookie("correct",0,{expires:1});
+		   }else{
+			   if(isCorrect){
+				   correct=parseInt(jQuery.cookie("correct")) + 1;   
+			   }else{
+				   correct=parseInt(jQuery.cookie("correct"));
+			   }
+		   }
+		   
+		   jQuery.cookie("total",total);
+		   jQuery.cookie("correct",correct);
+		   
+		   jQuery("#correct").html(correct);
+		   jQuery("#total").html(total);
+	   }
+	
+	function clearCookie(){
+		 jQuery.cookie("total",null);
+		   jQuery.cookie("correct",null);
+		   jQuery("#correct").html(0);
+		   jQuery("#total").html(0);
+	}
+  
+</script>
+
+<div id="container">
+<div id="baiduHeader">
+	<span>JavaMM</span>
+	<div style="float:right;display:inline-block;">
+		<span id="correct" style="color:green">--</span>/<span id="total" style="color:blue" >--</span> 
+		<a onclick="clearCookie()" style="font-size:12px;" href="#">清空</a> 
+		<a style="font-size:12px;" href="mailto:ijavamm@qq.com">纠错投稿</a>&nbsp; 
+	</div>
+</div>
+<div>
+	<h1>题目:</h1>
+	<div class="content"><pre>${exam.question}</pre></div>
+	<h1>选项：</h1>
+	<ul>
+		#{set sub:0 /} #{list items:exam.options.option, as:'option1'} #{set
+		sub++ /}
+		<li><input type="checkbox" value="${sub}" name="options"/>${sub}、${option1}</li>
+		#{/list}
+	</ul>
+	<div style="text-align:right;padding-right:20px;">
+		<a href="#" onclick="javascript:cal();" id="btnCommit"/>提交/答案</a>
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<a href="@{Application.index()}" >下一题</a>
+	</div>
+	<div id="result" style="display:none;">
+		<h1>结果：</h1>
+		<div  class="content" style="width:80%;height:50px;">
+				<img id="greenImg"  src="@{'/public/images/green.gif'}" style="display:none;float:right;"/>
+				<img id="redImg"  src="@{'/public/images/red.gif'}"  style="display:none;float:right;"/>
+				<span id="answer">${exam.answer}</span>   
+		</div>
+		<h1>参考解析：</h1>
+		<div id="detail" class="content"><pre>${exam.detail}</pre></div>
+	</div>
+</div>
+</div>
+<script>
+if(jQuery.cookie("total")==null){
+	   jQuery.cookie("total",0,{expires:1});
+}
+if(jQuery.cookie("correct")==null){
+	   jQuery.cookie("correct",0,{expires:1});
+}
+
+jQuery("#correct").html(jQuery.cookie("correct"));
+jQuery("#total").html(jQuery.cookie("total"));
+
+</script>
+

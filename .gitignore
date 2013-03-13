@@ -4,3 +4,8 @@
 *.jar
 *.war
 *.ear
+
+tmp/
+db/
+bin/
+bytecode/

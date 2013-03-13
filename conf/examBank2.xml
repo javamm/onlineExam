@@ -1,0 +1,49 @@
+<exams>
+	<exam>
+		
+<question><![CDATA[this给出如下代码 : 
+class Test{ 
+private int m; 
+public static void fun() { 
+// some code... 
+} } 
+如何使成员变量 m  被函数 fun() 直接访问 ? ]]>
+		</question>
+		<answer></answer>
+		<detail>fun为static,要直接访问的话，必须也要改成static</detail>
+		<options>
+		</options>
+	</exam>
+	<exam>
+		<question>下面句话是正确的 ? </question>
+		<answer>1,</answer>
+		<detail></detail>
+		<options>
+			<option><![CDATA[>>  是算术右移操作符]]></option>
+			<option><![CDATA[<<  是算术右移操作符]]></option>
+			<option><![CDATA[>>>  是算术右移操作符]]></option>
+			<option><![CDATA[<<<  是算术右移操作符]]></option>
+		</options>
+	</exam>
+	<exam>
+		<question><![CDATA[下面程序的输出为：
+	public class ArrayTest{ 
+		public static void main (String[] args){ 
+			Object[] ov; 
+		    String[] sa = { "Green", "Blue", "Red" }; 
+    		ov = sa; 
+    		System.out.println("Color=" + ov[1]); 
+		} 
+	}  ]]></question>
+		<answer>2,</answer>
+		<detail>
+			<![CDATA[]]>
+		</detail>
+		<options>
+			<option><![CDATA[存在编译错误]]></option>
+			<option><![CDATA[输出Color=Blue]]></option>
+			<option><![CDATA[输出Color=Green]]></option>
+			<option><![CDATA[运行时抛出异常]]></option>
+		</options>
+	</exam>
+</exams>
