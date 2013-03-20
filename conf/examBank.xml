@@ -2179,4 +2179,48 @@ public void mirrorRecursively(BinaryTreeNode binaryTreeNode) {
 		<options>
 		</options>
 	</exam>
+	<exam>
+		<question>Struts2 是如何把Action交给Spring托管的？它是单例的还是多例？</question>
+		<answer></answer>
+		<detail><![CDATA[
+<constant name="struts.objectFactory" value="spring"/>
+若action在struts配置文件中配置，是多例的。但若交给spring管理，因为spring默认为单例，为单例的
+]]></detail>
+		<options>
+		</options>
+	</exam>
+	<exam>
+		<question>请说一下线程池的中断策略(4个)？ 各有什么特点？</question>
+		<answer></answer>
+		<detail><![CDATA[
+ThreadPoolExecutor中断策略也即饱合策略，线程容器中放不下新的任务了
+
+    JDK提供了4种策略，分别是：
+
+    1、CallerRunsPolicy
+
+    2、AbortPolicy 中止任务，默认，放不下，中上放入新任务
+
+    3、DiscardPolicy 丢弃任务
+
+    4、DiscarOldestPolicy 丢弃最老任务
+]]></detail>
+		<options>
+		</options>
+	</exam>
+	<exam>
+		<question>请说一下Struts2源代码中有哪些设计模式？</question>
+		<answer></answer>
+		<detail><![CDATA[
+单例模式-- 典型应用： 类：
+org.apache.struts2.config.ServletContextSingleton
+
+模版方法模式：
+  在org.apache.struts2.components包中大量运用
+
+责任连模式
+]]></detail>
+		<options>
+		</options>
+	</exam>
 </exams>
