@@ -1,5 +1,5 @@
 #{extends 'main.html' /}
-#{set title:'JavaMM' /}
+#{set title:'Java面面' /}
 <script language="javascript">
 	
 	function cal(){
@@ -69,7 +69,7 @@
 
 <div id="container">
 <div id="baiduHeader">
-	<span>JavaMM</span>
+	<span>Java面面</span>
 	<div style="float:right;display:inline-block;">
 		<span id="correct" style="color:green">--</span>/<span id="total" style="color:blue" >--</span> 
 		<a onclick="clearCookie()" style="font-size:12px;" href="#">清空</a> 
@@ -99,7 +99,9 @@
 				<span id="answer">${exam.answer}</span>   
 		</div>
 		<h1>参考解析：</h1>
-		<div id="detail" class="content"><pre>${exam.detail}</pre></div>
+		<div id="detail" class="content">
+			<pre>${exam.detail}</pre>
+		</div>
 	</div>
 </div>
 </div>
@@ -115,4 +117,5 @@ jQuery("#correct").html(jQuery.cookie("correct"));
 jQuery("#total").html(jQuery.cookie("total"));
 
 </script>
+
 

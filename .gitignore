@@ -9,3 +9,4 @@ tmp/
 db/
 bin/
 bytecode/
+precompiled/
