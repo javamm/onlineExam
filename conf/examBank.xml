@@ -2106,7 +2106,33 @@ public class Singleton {
 		<question>定义一个函数，输入一个链表的头结点，反转该链表并输出反转后链表的头结点</question>
 		<answer></answer>
 		<detail><![CDATA[
-为防止链表断开，需要保存结点
+/**
+* 为防止链表断开，需要保存结点
+* 定义三个指针,PointCurrent,PointPrev,PointNext
+*/
+public LinkNode reverse(LinkNode linkNode) {
+        // 当前节点　
+        LinkNode pointCurrent=linkNode;
+
+        // 前一个节点
+        LinkNode pointPrev=null;
+
+        // 反转后
+        LinkNode resultNode=null;
+
+        while(pointCurrent !=null ) {
+                LinkNode pointNext=pointCurrent.next;   
+                if(pointNext == null ) {
+                        pointCurrent = pointCurrent;
+                }
+
+                pointCurrent.next = pointPrev;
+                pointPrev=pointCurrent;
+                pointCurrent=pointNext;
+        }
+
+        return resultNode;
+}
 ]]></detail>
 		<options>
 		</options>
@@ -2115,7 +2141,26 @@ public class Singleton {
 		<question>输入两个递增排序的链表，合并这两个链表并使新链表中的结点仍然是按照递增排序的</question>
 		<answer></answer>
 		<detail><![CDATA[
-暂无
+public LinkNode merge(LinkNode linkNode1,LinkNode linkNode2) {
+        if(linkNode1==null) {
+                return linkNode2;
+        }
+
+        if(linkNode2 ==null ) {
+                return linkNode1;
+        }
+
+        LinkNode mergedNode = null;
+        if(linkNode1.value < linkNode2.value ) {
+                mergedNode = linkNode1; 
+                mergeNode.next = merge(linkNode1.next,linkNode2);
+        }
+        else {
+                mergedNode = linkNode2;
+                mergeNode.next = merge(linkNode1,linkNode2.next);
+        }
+}
+
 ]]></detail>
 		<options>
 		</options>
@@ -2124,7 +2169,39 @@ public class Singleton {
 		<question>输入一棵二叉树A和B,判断B是不是A的子结构</question>
 		<answer></answer>
 		<detail><![CDATA[
-暂无
+public boolean hasSubTree(BinaryNodeTree tree1,BinaryNodeTree tree2 ) { 
+        
+        boolean result=false;
+
+        if(tree1 != null && tree2 !=null ) {
+                if(tree1.value = tree2.value) {
+                        result = doesTree1HaveTree2(tree1,tree2);
+                }
+
+                if(!result) {
+                        result = hasSubTree(tree1.left,tree2);
+                }
+                if(!result) {
+                        result = hasSubTree(tree1.right,tree2);
+                }
+        }    
+
+        return result;
+}
+public boolean doesTree1HaveTree2(BinaryNodeTree tree1,BinaryNodeTree tree2) {
+        if(tree2 == null ) {
+                return true;
+        }
+        if(tree1 == null ) { 
+                return false;
+        }
+        if(tree1.value != tree2.value ) { 
+                return false;
+        }
+
+        return doesTree1HaveTree2(tree1.left,tree2.left) && doesTree1HaveTree2(tree1.right,tree2.right);
+}
+
 ]]></detail>
 		<options>
 		</options>
@@ -2219,6 +2296,744 @@ org.apache.struts2.config.ServletContextSingleton
   在org.apache.struts2.components包中大量运用
 
 责任连模式
+]]></detail>
+		<options>
+		</options>
+	</exam>
+	<exam>
+		<question>一只青蛙一次可以跳上一级台阶，也可以跳上二级台阶，求该青蛙跳上一个n级台阶共有多少种跳法</question>
+		<answer></answer>
+		<detail><![CDATA[
+用递归，同斐波那契数列
+]]></detail>
+		<options>
+		</options>
+	</exam>
+	<exam>
+		<question>请写出归并排序</question>
+		<answer></answer>
+		<detail><![CDATA[
+package com.javamm.al.sort;
+
+/**
+ * 
+ * 算法复杂度O(nlogn),冒泡，插入，选择都需要O(n2),若n为10000,n平方100000000，nlogn为40000,若归并需要40s,
+ * 则插入排序需要28h 缺点：需要在存储器有另一个大小等于被排序的数据项目的数组,即要足够的空间 思想：归并两个有序的数组
+ * 注意：类名请写成MergeSort 
+ */
+public class MergeSort {
+
+	public static void recSort(int[] data, int left, int right) {
+
+		System.out.println("recSort,left:" + left + " right:" + right);
+
+		if (left == right) {
+
+			return;
+		}
+
+		int center = (left + right) / 2;
+
+		// 递归左边
+		recSort(data, left, center);
+
+		// 递归右边
+		recSort(data, center + 1, right);
+
+		// merge
+		merge(data, left, center, right);
+
+	}
+
+	public static void merge(int[] data, int left, int center, int right) {
+
+		System.out.println("merge,left:" + left + " center: " + center
+				+ " right: " + right);
+
+		int[] tmpData = new int[data.length];
+		int mid = center + 1;
+		int third = left;
+		int tmp = left;
+		while (left <= center && mid <= right) {
+			if (data[left] <= data[mid]) {
+				tmpData[third++] = data[left++];
+			} else {
+				tmpData[third++] = data[mid++];
+			}
+		}
+
+		while (mid <= right) {
+			tmpData[third++] = data[mid++];
+		}
+
+		while (left <= center) {
+			tmpData[third++] = data[left++];
+		}
+
+		// 将tmpData中的内容复制回原数组
+		while (tmp <= right) {
+			data[tmp] = tmpData[tmp++];
+		}
+	}
+
+	public static void main(String[] args) {
+
+		int[] data = { 3, 2, 1, 6, 0, 8 };
+
+		recSort(data, 0, data.length - 1);
+
+		for (int i = 0; i < data.length; i++) {
+			System.out.print(data[i] + " ,");
+		}
+	}
+}
+]]></detail>
+		<options>
+		</options>
+	</exam>
+	<exam>
+		<question>请写出快速排序</question>
+		<answer></answer>
+		<detail><![CDATA[
+/**
+* 思想：
+*   1. 一躺排序将要排序的数据分成独立的两部分,一部分比另一部分所有数据都小,可用两指针,leftP,rightP，分别指向首尾
+*   2. 再按此方法对这两部分数据进行排序,可用递归
+*
+* 算法复杂度：
+*
+*  最坏情况算法复杂度：O(n2)，最好O(nlogn)
+*/
+public class QuickSort {
+
+	private static int[] a;
+
+	public static void main(String[] args) {
+		a = new int[] { 5, 3, 2, 1, 8, 4 };
+		recQuickSort(0, a.length - 1);
+		display();
+	}
+
+	public static void recQuickSort(int left, int right) {
+		// Step 1 ：把数组划分成左边和右边，左边比选定的值小，右边比选定的值大
+		// Step 2 : 递归调用左边
+		// Step 3 : 递归调用右边
+		if (left >= right) {
+			return;
+		}
+
+		int pivot = a[right];
+		int partition = partitionIt(left, right, pivot);
+		recQuickSort(left, partition - 1);
+		recQuickSort(partition + 1, right);
+	}
+
+	public static int partitionIt(int left, int right, int pivot) {
+		display();
+
+		// 左指针
+		int leftP = left - 1;
+
+		// 右指针
+		int rightP = right;
+
+		while (true) {
+
+			// 左边的值都比pivot小时
+			while (a[++leftP] < pivot)
+				;
+
+			// 右边的值都比pivot大时
+			while (rightP > 0 && a[--rightP] > pivot)
+				;
+
+			if (leftP >= rightP) {
+				break;
+			} else {
+				// 交换
+				swap(left, right);
+			}
+		}
+		swap(leftP, right);
+		return leftP;
+	}
+
+	public static void swap(int left, int right) {
+		int temp = a[left];
+		a[left] = a[right];
+		a[right] = temp;
+	}
+
+	public static void display() {
+		for (int i = 0; i < a.length; i++) {
+			System.out.print(a[i] + " ");
+		}
+		System.out.println("");
+	}
+
+}
+]]></detail>
+		<options>
+		</options>
+	</exam>
+<exam>
+		<question><![CDATA[
+二叉搜索树排序的缺点
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+如果树中插入的是随机数据，执行效果很好。但若插入的是有序的，或是逆序的，速度变的很慢
+]]></detail>
+		<options>
+		</options>
+	</exam>
+<exam>
+		<question><![CDATA[
+写一个函数，层次遍历二叉树
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+/**
+* 思路：每打印一个结点的时候，如果该结点有子结点，将子结点放入队列末尾
+*/
+]]></detail>
+		<options>
+		</options>
+	</exam>
+<exam>
+		<question><![CDATA[
+输入一个字符串，打印出该字符串中字符的所有排列。如输入abc,则输出acb,bac,bca,cab,cba
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+/**
+* 将字符串分为两部分，一部分是字符串的第一个字符,另一部分是第一个字符外所有字符
+* 用递归 
+*/
+```
+]]></detail>
+		<options>
+		</options>
+	</exam>
+<exam>
+		<question><![CDATA[
+输入一个字符串，打印出该字符串中字符的所有组合。如输入abc,则输出a,b,c,ab,ac,bc,abc,注，ab,ba是不同的排列，但只算一个组合
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+/**
+* 输入n个字符，则能构成长度为1,2,...n的组合
+* 求n个字符长度为m的组合的时候，把m个字符分为两部分，第一个和m-1个，递归
+*/
+]]></detail>
+		<options>
+		</options>
+	</exam>
+<exam>
+		<question><![CDATA[
+输入一个含有8个数字的数组，判断有没有可能这8个数字分别放到正方体的8个顶点上，使得每一面的顶点之和都相等。
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+/**
+* 如输入a1,a2,a3,a4,a5,a6,a7,a8,求所有排列，看是否满足条件，a1+a2+a3+a4==a5+a6+a7+a8,a1+a3+a5+a7=a2+a4+a6+a8,并且a1+a2+a5+a6=a3+a4+a7+a8
+*/
+]]></detail>
+		<options>
+		</options>
+	</exam>
+<exam>
+		<question><![CDATA[
+数组中有一个数字出现的次数超过了数组长度的一半，请求出这个数字。如{1,2,3,2,2,2,5,4,2},此数字为2
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+/**
+* 思路一：排序，排好序后，求中间数字
+* 根据快排思想，先随机选一个数字，使比他小的都排在左边，比他大的都排右边。完成后，若此数字下标为n/2,即为此数。如果下标> n/2,那么此数位于左边,可在左半部查找，用递归。否则位于右边
+* 思路二：
+* 遍历数组时，保存两个值，一个为数组中数字，一个为次数
+* 当遍历下一个数字时，若与保存数字相同，次数+1.若与保存数字不同，次数-1,若次数=0，重新保存新数字，并将次数设为1.最后一次把次数设为1的数字即为所需的数字
+* eg: 
+* 1,1
+* 2,1
+* 3,1
+* 2,1
+* 2,2
+* 2,3
+* 2,2
+* 2,1
+* 2,2
+*/
+]]></detail>
+		<options>
+		</options>
+	</exam>
+<exam>
+		<question><![CDATA[
+给定一个无序整数数组，返回这个数组中第k小的数 
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+/**
+* 思路一：
+* 最平常的思路是将数组排序，最快的排序是快排，然后返回已排序数组的第k个数，算法时间复杂度为O（nlogn），空间复杂度为O（1）。使用快排的思想，但是每次只对patition之后的数组的一半递归，这样可以将时间复杂度将为O（n）。
+
+* 具体的思路：将数组按照第一个数字first进行划分，将比first小的放在左边，比first大的放在右边，first放中间。返回patition之后first的下标j。如果此时j+1==k（+1是因为数组下标从0开始）那么说明a[j]就是要找的第k个数。如果j+1<k,递归查找左半部分；如果j+1>k，递归查找右半部分
+* 
+* 思路二：
+* 维持一个大小为k的大顶堆，遍历一次数组，如果数组中的元素比堆顶的元素小，那么就更新堆。最后堆中存放的是数组中的前k小元素。堆顶元素即为要求的第k小个数。
+
+* 这种算法不需要改变原数组结构，但是需要额外维持一个大小为O（k）的堆，时间复杂度为（nlogk）。当k比n小的多的时候，这个算法也是一个很好的选择
+/*
+]]></detail>
+		<options>
+		</options>
+	</exam>
+<exam>
+		<question><![CDATA[
+输入一个整数型数组，数组中有正数也有负数。数组中一个或连续的多个整数组成一个子数组。求所有子数组的和的最大值
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+/**
+* 思路一：列举数组规律
+*   维护一个最大值max
+*   若max < 0 ,抛弃
+*   若 > max ,更新max
+*
+* 思路二：动态规划
+*   f(i)表示以第i个数字结尾的子数组的最大和,0<=i<n,有如下公式
+*     f(i) = data[i], i=0或f(i-1)<=0
+*     f(i) = f(i-1) + data[i] i!=0 && f(i-1) > 0
+*/
+]]></detail>
+		<options>
+		</options>
+	</exam>
+<exam>
+		<question><![CDATA[
+输入一个整数n,求从1到n这n个整数的十进制表示中1出现的次数。eg: 输入12,包含1的数字，1,10,11,12,共出现了5次
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+暂无
+]]></detail>
+		<options>
+		</options>
+	</exam>
+
+<exam>
+		<question><![CDATA[
+输入一个正整数数组，把数组里所有数字拼接起来排成一个数，打印能拼接出的所有数字中最小的一个。eg输入数组{3,32,321} ,则打印这3个数字排成的最小数字321323
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+/**
+* 思路一：求所有数字的全排列，然后比较大小
+*/
+]]></detail>
+		<options>
+		</options>
+	</exam>
+<exam>
+		<question><![CDATA[
+我们把只包含因子2，3，5的数称为丑数(ugly number),求按从小到大的顺序的第1500个丑数。eg: 6,8都为丑数，而14不是，因为14含有因子7
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+解法一：计算每个数，效率不是很高
+public boolean isUgly(int number) {
+	while(number /2 ==0) {
+		number / = 2;
+	}
+	while(number /3 ==0) {
+		number / = 3;
+	}
+	while(number /3 ==0) {
+		number / = 3;
+	}
+
+	return (number ==1 ) ? true : false;
+}
+
+public int getUglyNumber( int index) {
+	if(index < = 0 ) {
+		return 0;
+	}
+
+
+	int number = 0;
+	int uglyFound = 0;
+	while(uglyFound < index ) {
+		++number;
+
+		if(isUgly(number) {
+			++uglyFound;
+		}
+	}
+
+	return number;
+}
+
+解法二：空间换时间
+/**
+* M1 M2 M3,若index=1500，需数组大小为6kb
+*/
+public int getUglyNumber( int index ) {
+	if ( index <= 0 ) {
+		return 0;
+	}
+
+	int [] numbers = new int [index];
+	numbers[0] = 1;
+	int nextUglyIndex = 1;
+
+	int multiply2 = numbers[0];
+	int multiply3 = numbers[0];
+	int multiply5 = numbers[0];
+
+	while(nextUglyIndex < index ) {
+		int min = min(multiply2 * 2,multiply3 * 3,multiply5 * 5 );	
+		numbers[nextUglyIndex]=min;
+	}
+
+	while(multiply2 * 2 <= numbers[nextUglyIndex]) {
+		++multiply2;
+	}
+	while(multiply3 * 3 <= numbers[nextUglyIndex]) {
+		++multiply3;
+	}
+	while(multiply5 * 5 <= numbers[nextUglyIndex]) {
+		++multiply5;
+	}
+
+	++nextUglyIndex;
+}
+]]></detail>
+		<options>
+		</options>
+	</exam>
+<exam>
+		<question><![CDATA[
+在字符串中找出第一个只出现一次的字符。eg: 输入“abaccdeff“，输出b
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+/**
+* 根据ASCII码值作为数组下标，构造字符Hash
+*/
+]]></detail>
+		<options>
+		</options>
+	</exam>
+<exam>
+		<question><![CDATA[
+定义一个函数，输入两个字符串，从第一个字符串中删除在第二个字符串中出现过的所有字符。eg: "We are students","aeiou",结果为"W r studnts"
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+/**
+* 构造字符Hash,O（1）时间即可判断是不是在第一个字符串中出现过
+*/
+]]></detail>
+		<options>
+		</options>
+	</exam>
+<exam>
+		<question><![CDATA[
+定义一个函数，删除字符串中所有重复出现的字符。如输入google,输出为gole
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+/**
+* boolean型的字符hash,当扫描到g时，将g的ascii码103下标的标为true,下次再扫描到g时，即知重复
+*/
+]]></detail>
+		<options>
+		</options>
+	</exam>
+<exam>
+		<question><![CDATA[
+在英语中，如果两个单词中出现的字母相同，并且每个字母出现的次数也相同，那么这两个单词互为变位词(Anagram),如silent与listen,evil与live, 请完成一个函数，判断输入的两个字符串是不是互为变位词
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+/**
+* 字符hash,扫描第一个字符串，每扫描到一个字符串，对应的值加1，然后再扫描第二个字符串，对应的值-1,最后若hash中的所有的值都为0,那么互为变位词
+*/
+]]></detail>
+		<options>
+		</options>
+	</exam>
+<exam>
+		<question><![CDATA[
+在数组中的两个数字，如果前面一个数字 > 后面一个数字，则这两个数字组成一个逆序对。输入一个数组，求出这个数组中逆序对的总数。eg: {7,5,6,4},有5个逆序对，{7,6},{7,5},{7,4},{6,4},{5,4}
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+/**
+* 归并排序
+**/
+]]></detail>
+		<options>
+		</options>
+	</exam>
+<exam>
+		<question><![CDATA[
+输入两个链表，找出它们的第一个公共结点。
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+/**
+* 链表如果有公共结点，肯定为Y字型，而非X型
+* 从后往前比较
+* 将链表放入栈中
+*/
+]]></detail>
+		<options>
+		</options>
+	</exam>
+<exam>
+		<question><![CDATA[
+统计一个数字在排序数组中出现的次数。如输入{1,2,3,3,3,3,4,5}，输入3,则输出为4
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+/**
+* 二分查找，找出3的起始位置和结束位置,时间复杂度为O(logn)
+*/
+]]></detail>
+		<options>
+		</options>
+	</exam>
+<exam>
+		<question><![CDATA[
+输入一颗二叉树的根结点，求该树的深度
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+/**
+* 树只有一个结点，深度为1
+* 若只有左子树，深度为左子树深度 + 1
+* 若只有右子树，深度为右子树深度 + 1
+* 既有左子树，又有右子树，深度为左子树和右子树中的较大值 + 1
+*/
+int treeDepth(BinaryTreeNode binaryTreeNode) {
+	if(binaryTreeNode == null ) {
+		return 0;
+	}
+
+	int leftDepth=treeDepth(binaryTreeNode.left);
+	int rightDepth=treeDepth(binaryTreeNode.right);
+	return (leftDepth > rightDepth) ? (leftDepth+1):(rightDepth+1);
+}
+]]></detail>
+		<options>
+		</options>
+	</exam>
+<exam>
+		<question><![CDATA[
+输入一颗二叉树的根结点，判断该树是不是平衡二叉树.如果某二叉树中任意结点的左右子树的深度相差不超过1，那么它就是一颗平衡二叉树
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+/**
+* 后序遍历
+* 递归求出左子树，右子树深度
+* 对深度进行比较
+*/
+]]></detail>
+		<options>
+		</options>
+	</exam>
+<exam>
+		<question><![CDATA[
+一个整数数组中除了两个数字外，其它数字都出现了两次，请找出这两个只出现了一次的数字。要求时间复杂度是O(n),空间复杂度是O(1)
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+/**
+* 任何一个数字异或它自己都等于０
+* eg: {2,4,3,6,3,2,5,5}，异或得到的结果为0010，把数组拆分，按照倒数第二位是不是1，会拆分为{2,3,6,3,2}和{4,5,5}，再求异或即可得到结果
+*/
+]]></detail>
+		<options>
+		</options>
+	</exam>
+<exam>
+		<question><![CDATA[
+输入一个递增排序的数组和一个数字s,在数组中查找两个数，使它们的和正好为s。如果有多对数字的和等于s，输出任意一对即可。eg：输入{1,2,4,7,11,15}和15，输出为{4,11}
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+/**
+* 定义两个指针，headPoint,tailPoint
+* 若data[headPoint] + data[tailPoint] > 15 ,tailPoint --
+* 若data[headPoint] + data[tailPoint] < 15 ,headPoint ++
+**/
+]]></detail>
+		<options>
+		</options>
+	</exam>
+<exam>
+		<question><![CDATA[
+输入一个正数s，打印出所有和为s的连续正数序列（至少包含两个数)。如输入15，则输出为{1,2,3,4,5}，{4,5,6},{7,8}
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+/**
+* 定义两个指针，firstPoint=0,secondPoint=1
+* 若data[firstPoint} +...+ data[secondPoint] < 15 secondPoint ++; 
+* 若data[firstPoint} +...+ data[secondPoint] > 15 firstPoint ++; 
+* 以输入9为例：
+* 1 + 2 < 9 
+* 1 + 2 + 3 <9
+* 1 + 2 + 3 + 4 > 9
+* 2 + 3 + 4 = 9
+* 2 + 3 + 4 + 5 > 9
+* 3 + 4 + 5 >9
+* 4 + 5 = 9
+**/
+]]></detail>
+		<options>
+		</options>
+	</exam>
+<exam>
+		<question><![CDATA[
+输入一个英文句子，翻转句子中单词的顺序，但单词内的顺序不变，标点符号和字母一样处理。eg: "I am a student." 输出为"student. a am I"
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+/**
+* 1. 翻转所有字符，得到".tneduts a ma I"
+* 2. 翻转每个单词中字符的顺序
+* 3. 用指针
+**/
+]]></detail>
+		<options>
+		</options>
+	</exam>
+<exam>
+		<question><![CDATA[
+字符串的左旋转操作是把字符串前面的若干个字符转移到字符串的尾部。实现一个函数实现字符串左旋转操作的功能。eg 输入"abcdefg"和2，则结果为"cdefgab"
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+/**
+* 先翻转成 ba + gfedc
+* 再翻转bagfedc，即得cdefgab
+*/
+]]></detail>
+		<options>
+		</options>
+	</exam>
+<exam>
+		<question><![CDATA[
+把n个骰子扔在地上，所有骰子朝上一面的点数之和为s。输入n，输出s的概率
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+/**
+* 总数为6的n次方
+* 解法一：递归 f(1) 有6种可能 f(n) = s - f(n-1)
+**/
+]]></detail>
+		<options>
+		</options>
+	</exam>
+<exam>
+		<question><![CDATA[
+从扑克牌中随机抽5张牌，判断是不是一个顺子。A为1,J为11,Q为12,K为13。大小王可看成任意数字
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+/**
+* 将大小王看成数字0
+* 排序
+* 统计0的个数以及相邻数字间空缺总数
+* 重复出现，数组不是连续的
+*/
+]]></detail>
+		<options>
+		</options>
+	</exam>
+<exam>
+		<question><![CDATA[
+0,1,...,n-1这n个数字排成一个圆圈，从数字0开始每次从这个圆圈里删除第m个数字，求这个圆圈里剩下的最后一个数字
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+/**
+* 约瑟夫环
+* 解法一：环形链表 时间复杂度O(mn)
+* 解法二：f(n,m) = 0 (n = 1) f(n,m)=[f(n-1,m) + m] % n (n>1)
+*/
+]]></detail>
+		<options>
+		</options>
+	</exam>
+<exam>
+		<question><![CDATA[
+求1+2+...+n,要求不能使用乘除法，for,while,if,else,switch,case,a?b:c
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+暂无
+]]></detail>
+		<options>
+		</options>
+	</exam>
+<exam>
+		<question><![CDATA[
+写一个函数，求两个整数之和，要求在函数体内不得使用+ - * /
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+/**
+* 1. 各位相加不进位，异或
+* 2. 考虑进位，与运算
+* 3. 将前面两个数相加,即重复1,2,直到不产生进位为止
+*/
+]]></detail>
+		<options>
+		</options>
+	</exam>
+<exam>
+		<question><![CDATA[
+输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历结果。假设数组中任意两个数字不同。
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+/**
+* {5,7,6,9,11,10,8 } 8为根结点 ,5,7,6比8小，9,11,10比8大
+* 递归子结构
+*/
+]]></detail>
+		<options>
+		</options>
+	</exam>
+<exam>
+		<question><![CDATA[
+用shell分析Apache日志(/usr/local/apache2/logs/access_log)，要求列出当天访问次数最多20个IP
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+cut -d- -f 1 /usr/local/apache2/logs/access_log |uniq -c | sort -rn | head -20
+]]></detail>
+		<options>
+		</options>
+	</exam>
+<exam>
+		<question><![CDATA[
+什么时候才要建索引,什么时候不要建索
+]]></question>
+		<answer></answer>
+		<detail><![CDATA[
+* 如果每次都需要取到所有表记录，无论如何都必须进行全表扫描了，那么是否加索引也没有意义了。
+* 对非唯一的字段，例如“性别”这种大量重复值的字段，增加索引也没有什么意义。
+* 对于记录比较少的表，增加索引不会带来速度的优化反而浪费了存储空间，因为索引是需要存储空间的,而且有个致命缺点是对于update/insert/delete的每次执行，字段的索引都必须重新计算更新 
+
 ]]></detail>
 		<options>
 		</options>
