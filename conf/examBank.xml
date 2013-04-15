@@ -2035,6 +2035,19 @@ public class Singleton {
 		<detail><![CDATA[
 // 考查代码完备性
 // eg: 当指数为负数，底数为0等
+// 反面例子：
+double power(double base,int exponent) {
+	double result = 1.0d;
+	for(int i=1; i<exponent+1; ++i) {
+		result * = base;
+	}
+	return result;
+}
+
+// 更高效的做法，用移位代替除以2
+f(n) = f(n/2)*f(n/2) n为偶数
+f(n) = f(n-1/2)*f(n-1/2)*a n为奇数
+
 ]]></detail>
 		<options>
 		</options>
@@ -2045,6 +2058,21 @@ public class Singleton {
 		<detail><![CDATA[
 // 当n很大时，会溢出
 // 可考虑用字符串表示数字
+// 反面例子，没考虑n很大时溢出
+public void print(int n) {
+	int number =1;
+	int i=0;
+
+	// 求出最大值
+	while(i++ < n ) {
+		number * =10;
+	}
+
+	// 打印
+	for(i=1; i<number; i++ ) {
+		System.out.println(i);
+	}
+}
 ]]></detail>
 		<options>
 		</options>
@@ -2053,7 +2081,37 @@ public class Singleton {
 		<question>给定单向链表的头指针和一个结点指针，定义一个函数在O(1)时间删除结点</question>
 		<answer></answer>
 		<detail><![CDATA[
-把需删除结点的下一个结点内容复制到需删除的结点上，再把下一个结点删除
+// 把需删除结点的下一个结点内容复制到需删除的结点上，再把下一个结点删除
+void deleteNode(ListNode pHead,ListNode pToBeDeleted) {
+	if(pHead ==null || pToBeDeleted ==null ) {
+		return ;
+	}
+
+	// 根结点为尾结点
+	if(pHead == pToBeDeleted) {
+		pHead = null;
+		pToBeDeleted = null;	
+	}
+
+	// 要删除结点非尾结点
+	if(pToBeDeleted.next !=null ){
+		ListNode pNext = pToBeDeleted.next;
+		pToBeDeleted.value = pNext.value;
+		pToBeDeleted.next = pNext.next;
+
+		pNext = null;
+	}	
+	else {
+		// 删除尾结点	
+		ListNode listNode=pHead;
+		while(listNode.next != pToBeDeleted) {
+			listNode = listNode.next;
+		}
+
+		listNode.next = null;
+		pToBeDeleted = null;
+	}
+}
 ]]></detail>
 		<options>
 		</options>
@@ -2252,6 +2310,9 @@ public void mirrorRecursively(BinaryTreeNode binaryTreeNode) {
 * 如果下一个弹出的数字不在栈顶，把压栈序列中还没有入栈的数字压入辅助栈，直到把下一个需要弹出的数字压入栈顶为止
 * 如果所有的数字都压入栈了，仍然没有找到下一下弹出的数字，那么该序列不可能是一个弹出序列
 */
+public boolean isPopOrder(int [] push,int [] pop,int length) {
+
+}
 ]]></detail>
 		<options>
 		</options>
@@ -2607,6 +2668,26 @@ public class QuickSort {
 *     f(i) = data[i], i=0或f(i-1)<=0
 *     f(i) = f(i-1) + data[i] i!=0 && f(i-1) > 0
 */
+public int findGreatestSumOfSubArray(int [] data,int length) {
+	if(data ==null || length <=0) {
+		return 0;
+	}
+
+	int currentSum=0;
+	int greatestSum=0;
+	for (int i=0; i<length; i++ ){
+		if(currentSum < 0) 
+			currentSum=data[i];
+		else
+			currentSum + = data[i];
+
+		if(currentSum > greatestSum) {
+			greatestSum=currentSum;
+		}
+	}
+
+	return greatestSum;
+}
 ]]></detail>
 		<options>
 		</options>
@@ -2642,7 +2723,7 @@ public class QuickSort {
 ]]></question>
 		<answer></answer>
 		<detail><![CDATA[
-解法一：计算每个数，效率不是很高
+解法一：会判断每个数是不是丑数，效率不是很高
 public boolean isUgly(int number) {
 	while(number /2 ==0) {
 		number / = 2;
@@ -2662,7 +2743,6 @@ public int getUglyNumber( int index) {
 		return 0;
 	}
 
-
 	int number = 0;
 	int uglyFound = 0;
 	while(uglyFound < index ) {
@@ -2679,6 +2759,7 @@ public int getUglyNumber( int index) {
 解法二：空间换时间
 /**
 * M1 M2 M3,若index=1500，需数组大小为6kb
+* 不需要在非丑数上进行计算
 */
 public int getUglyNumber( int index ) {
 	if ( index <= 0 ) {
@@ -2689,26 +2770,26 @@ public int getUglyNumber( int index ) {
 	numbers[0] = 1;
 	int nextUglyIndex = 1;
 
-	int multiply2 = numbers[0];
-	int multiply3 = numbers[0];
-	int multiply5 = numbers[0];
+	int multiply2 = 0;
+	int multiply3 = 0;
+	int multiply5 = 0;
 
 	while(nextUglyIndex < index ) {
-		int min = min(multiply2 * 2,multiply3 * 3,multiply5 * 5 );	
+		int min = min(data[multiply2] * 2,data[multiply3] * 3,data[multiply5] * 5 );	
 		numbers[nextUglyIndex]=min;
-	}
 
-	while(multiply2 * 2 <= numbers[nextUglyIndex]) {
-		++multiply2;
-	}
-	while(multiply3 * 3 <= numbers[nextUglyIndex]) {
-		++multiply3;
-	}
-	while(multiply5 * 5 <= numbers[nextUglyIndex]) {
-		++multiply5;
-	}
+		while(data[multiply2] * 2 <= numbers[nextUglyIndex]) {
+			++multiply2;
+		}
+		while(data[multiply3] * 3 <= numbers[nextUglyIndex]) {
+			++multiply3;
+		}
+		while(data[multiply5] * 5 <= numbers[nextUglyIndex]) {
+			++multiply5;
+		}
 
-	++nextUglyIndex;
+		++nextUglyIndex;
+	}
 }
 ]]></detail>
 		<options>
@@ -2723,6 +2804,22 @@ public int getUglyNumber( int index ) {
 /**
 * 根据ASCII码值作为数组下标，构造字符Hash
 */
+public char firstNotRepeatingChar(String str) {
+	if(str==null ) {
+		return null;
+	}	
+
+	int [] hashTable=new int[256];
+	for(int i=0;i<str.length;i++) {
+		hashTable[str.charAt(i)]++;
+	}
+
+	for(int j=0; j<256; j++) {
+		if(hashTable[j]==1) {
+			return j;
+		}
+	}
+}
 ]]></detail>
 		<options>
 		</options>
